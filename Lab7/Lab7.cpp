@@ -40,7 +40,7 @@ int main()
 		add eax, ebx
 		end: mov y, eax
 	}
-	printf("Result: %d", y);
+	printf("Result: %d\n\n", y);
 
 	//задание 3
 	//Y = X^N / 2^N
@@ -64,7 +64,7 @@ int main()
 		idiv ebx
 		mov y, eax
 	}
-	printf("Result: %d", y);
+	printf("Result: %d\n\n", y);
 
 	//с постусловием
 	printf("Input X, N: ");
@@ -85,7 +85,7 @@ int main()
 		idiv ebx
 		mov y, eax
 	}
-	printf("Result: %d", y);
+	printf("Result: %d\n\n", y);
 
 	//цикл с счетчиком
 	printf("Input X, N: ");
