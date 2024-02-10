@@ -56,7 +56,7 @@ int main()
 		mov ebx, 1
 		cycle: cmp ecx, 0
 		jle end
-		imul eax, x
+		imul x
 		imul ebx, 2
 		dec cx
 		jmp cycle
@@ -76,7 +76,7 @@ int main()
 		mov ebx, 1
 		cmp ecx, 0
 		jle end
-		cycle: imul eax, x
+		cycle: imul x
 		imul ebx, 2
 		dec cx
 		cmp ecx, 0
@@ -95,7 +95,7 @@ int main()
 		mov ecx, n
 		mov eax, 1
 		mov ebx, 1
-		cycle: imul eax, x
+		cycle: imul x
 		imul ebx, 2
 		loop cycle
 		cdq
