@@ -5,20 +5,20 @@ int main()
 {
 	//задание 1
 	//Y = a - b + (c * d)^2
-    int a, b, c, d, y;
-
-    printf("Input A, B, C, D: ");
-    scanf("%d %d %d %d", &a, &b, &c, &d);
-    __asm	
-    {
+	int a, b, c, d, y;
+	
+	printf("Input A, B, C, D: ");
+	scanf("%d %d %d %d", &a, &b, &c, &d);
+	__asm	
+	{
 		mov eax, c
-		imul eax, d
+		imul d
 		imul eax
 		add eax, a
 		sub eax, b
 		mov y, eax
-    }
-    printf("Result: %d\n\n", y);
+	}
+	printf("Result: %d\n\n", y);
 
 	//задание 2
 	//Y = A / B + C * A, если B <> 0; Y = A * A + C, если B = 0
