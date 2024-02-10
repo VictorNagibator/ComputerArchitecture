@@ -9,7 +9,7 @@ int main()
 
     printf("Input A, B, C, D: ");
     scanf("%d %d %d %d", &a, &b, &c, &d);
-    __asm 
+    __asm	
     {
 		mov eax, c
 		imul eax, d
