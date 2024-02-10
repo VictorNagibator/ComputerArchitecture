@@ -44,7 +44,7 @@ int main()
 
 	//задание 3
 	//Y = X^N / 2^N
-	int x, n, y;
+	int x, n;
 
 	//с предусловием
 	printf("Input X, N: ");
