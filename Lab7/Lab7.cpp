@@ -94,10 +94,12 @@ int main()
 		mov ecx, n
 		mov eax, 1
 		mov ebx, 1
+		cmp ecx, 0
+		jle end
 		cycle: imul x
 		imul ebx, 2
 		loop cycle
-		cdq
+		end: cdq
 		idiv ebx
 		mov y, eax
 	}
