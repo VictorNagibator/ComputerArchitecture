@@ -34,9 +34,8 @@ int main()
 		jmp end
 		notzero: cdq
 		idiv b
-		mov ebx, eax
-		mov eax, c
-		imul a
+		mov ebx, c
+		imul ebx, a
 		add eax, ebx
 		end: mov y, eax
 	}
