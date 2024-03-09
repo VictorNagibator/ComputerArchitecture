@@ -7,7 +7,7 @@ int main() {
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
 
-    const int n = 8;
+    const int n = 4;
     signed short int arr[n][4];
     
     srand(time(NULL));
@@ -29,7 +29,8 @@ int main() {
     printf("Введите число a: ");
     do
     {
-        scanf("%d", &a);
+        scanf("%hd", &a);
+        if (a <= 0) printf("Число a должно быть больше 0. Повторите ввод: ");
     } while (a <= 0);
 
     signed short int remainders[n][4];
@@ -54,7 +55,7 @@ int main() {
         //теперь ищем максимальный номер строки
         mov ecx, n ; Счетчик строк
         rowcycl : movq mm0, qword ptr[remainders + ecx * 8] ; Загрузка строки remainders[i] в регистр MM0
-        checkA : pxor mm1, mm1 ; Обнуление регистра MM1
+        pxor mm1, mm1 ; Обнуление регистра MM1
         pcmpeqw mm1, mm0 ; Сравнение элементов строки со строкой нулей
         pmovmskb eax, mm1 ; Сохранение знаковых битов в регистре EAX
         cmp eax, 0xFF ; Проверка, что все элементы строки равны нулю (все биты младшего байта равны 1)
