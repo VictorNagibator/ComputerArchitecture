@@ -38,26 +38,26 @@ int main() {
     __asm {
         //сначала формируем массив остатков
         mov ecx, n ; Счетчик строк
-        lea esi, arr ; Указатель на arr
-        lea edi, remainders ; Указатель на remainders
+        lea esi, arr ; Указатель на arr в ESI
+        lea edi, remainders ; Указатель на remainders в EDI
         calculateRemainders : push ecx ; Сохранение счетчика строк
         mov ecx, 4 ; Количество элементов в строке
-        calculateNextElement : mov ax, word ptr[esi]; Загрузка элемента массива arr[i][j] в регистр AX
-        cwd; Преобразование AX в DX:AX
+        calculateNextElement : mov ax, word ptr[esi] ; Загрузка элемента массива arr[i][j] в регистр AX
+        cwd ; Преобразование AX в DX:AX
         idiv word ptr[a] ; Деление элемента на число a
         mov word ptr[edi], dx ; Сохранение остатка в массиве remainders[i][j]
         add esi, 2 ; Переход к следующему элементу массива arr
         add edi, 2 ; Переход к следующему элементу массива remainders
         loop calculateNextElement ; Повторить для всех элементов строки
         pop ecx ; Восстановление счетчика строк
-        loop calculateRemainders ; Повторить для всех строк, если еще есть
+        loop calculateRemainders ; Повторить для всех строк
 
         //теперь ищем максимальный номер строки
         mov ecx, n ; Счетчик строк
         rowcycl : movq mm0, qword ptr[remainders + ecx * 8] ; Загрузка строки remainders[i] в регистр MM0
         pxor mm1, mm1 ; Обнуление регистра MM1
         pcmpeqw mm1, mm0 ; Сравнение элементов строки со строкой нулей
-        pmovmskb eax, mm1 ; Сохранение знаковых битов в регистре EAX
+        pmovmskb eax, mm1 ; Сохранение знаковых битов регистра MM1 в регистре EAX
         cmp eax, 0xFF ; Проверка, что все элементы строки равны нулю (все биты младшего байта равны 1)
         je end ; Если строка состоит только из элементов, кратных числу a, то выходим
         loop rowcycl ; Повторить для всех строк
