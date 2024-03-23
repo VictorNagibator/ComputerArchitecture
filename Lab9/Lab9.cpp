@@ -8,7 +8,7 @@ int main()
     SetConsoleOutputCP(1251);
     SetConsoleCP(1251);
 
-    const int n = 100, m = 10;
+    const int n = 10000, m = 10;
     int arr[n][m];
     int maxRow = -1;
     double startTime;
@@ -60,21 +60,19 @@ int main()
     //вариант алгоритма в многопоточном режиме
     maxRow = -1;
     startTime = omp_get_wtime();
-    #pragma omp parallel for reduction(max:maxRow)
+    #pragma omp parallel for reduction(max : maxRow)
     for (int i = 0; i < n; i++) {
-        int localMaxRow = 0; //локальная переменная для каждого потока
+        bool areAllElementsMultipleOfA = true;
         for (int j = 0; j < m; j++) {
             if (arr[i][j] % a != 0) {
-                localMaxRow = -1; //если не все элементы кратны a, не учитываем строку
+                areAllElementsMultipleOfA = false;
                 break;
             }
         }
 
-        if (localMaxRow != -1) {
-            localMaxRow = i; //если все элементы кратны a, запоминаем строку
+        if (areAllElementsMultipleOfA) {
+            maxRow = i;
         }
-
-        if (localMaxRow > maxRow) maxRow = localMaxRow; // сравниваем и обновляем максимальное значение строки
     }
 
     if (maxRow != -1) printf("Максимальный номер строки с элементами, кратными числу a: %d\n", maxRow);
