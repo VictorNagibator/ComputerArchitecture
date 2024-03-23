@@ -8,7 +8,7 @@ int main()
     SetConsoleOutputCP(1251);
     SetConsoleCP(1251);
 
-    const int n = 10000, m = 10;
+    const int n = 100, m = 10;
     int arr[n][m];
     int maxRow = -1;
     double startTime;
@@ -36,7 +36,7 @@ int main()
         if (a == 0) printf("Число a должно быть не равно 0. Повторите ввод: ");
     } while (a == 0);
 
-    printf("\nРазмеры массива: %d на %d:\n\n", n, m);
+    printf("\nРазмеры массива: %d на %d\n\n", n, m);
 
     //вариант алгоритма в обычном режиме
     startTime = omp_get_wtime();
