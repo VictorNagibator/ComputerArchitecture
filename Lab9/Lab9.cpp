@@ -1,83 +1,122 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
+#include <format>
 #include <windows.h>
-#include <omp.h>
+#include <omp_llvm.h>
+
+using namespace std;
 
 int main()
 {
-    SetConsoleOutputCP(1251);
-    SetConsoleCP(1251);
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
 
-    const int n = 100, m = 10;
-    int arr[n][m];
-    int maxRow = -1;
-    double startTime;
-    int a;
+	int** arr;
+	int n, m;
+	int maxRow = -1;
+	int a;
+	double startTime, endTime;
 
-    //заполнение массива
-    srand(time(NULL));
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < m; j++) {
-            arr[i][j] = (-16384) + rand() % (32768);
-        }
-    }
+	cout << "Введите n: ";
+	cin >> n;
 
-    //вывод массива
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < m; j++) {
-            printf("%6d ", arr[i][j]);
-        }
-        printf("\n");
-    }
+	cout << "Введите m: ";
+	cin >> m;
 
-    printf("\nВведите число a: ");
-    do {
-        scanf("%d", &a);
-        if (a == 0) printf("Число a должно быть не равно 0. Повторите ввод: ");
-    } while (a == 0);
+	cout << "Введите a: ";
+	cin >> a;
 
-    printf("\nРазмеры массива: %d на %d\n\n", n, m);
+	//выделение памяти под массив
+	arr = new int* [n];
+	for (int i = 0; i < n; i++)
+		arr[i] = new int[m];
 
-    //вариант алгоритма в обычном режиме
-    startTime = omp_get_wtime();
-    for (int i = 0; i < n; i++) {
-        bool areAllElementsMultipleOfA = true;
-        for (int j = 0; j < m; j++) {
-            if (arr[i][j] % a != 0) {
-                areAllElementsMultipleOfA = false;
-                break;
-            }
-        }
-        if (areAllElementsMultipleOfA) {
-            maxRow = i;
-        }
-    }
+	//заполнение массива случайными числами
+	srand(time(NULL));
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			arr[i][j] = (-16384) + rand() % (32768);
+		}
+	}
 
-    if (maxRow != -1) printf("Максимальный номер строки с элементами, кратными числу a: %d\n", maxRow);
-	else printf("В массиве нет строк, в которых все элементы кратны числу a\n");
-    printf("Стандартное время алгоритма (без OpenMP) в мс = %f\n\n", omp_get_wtime() - startTime);
+	//вывод массива
+	//for (int i = 0; i < n; i++) {
+	//	for (int j = 0; j < m; j++) {
+	//		cout << format("{} ", arr[i][j]);
+	//	}
+	//	cout << "\n";
+	//}
 
-    //вариант алгоритма в многопоточном режиме
-    maxRow = -1;
-    startTime = omp_get_wtime();
-    #pragma omp parallel for reduction(max : maxRow)
-    for (int i = 0; i < n; i++) {
-        bool areAllElementsMultipleOfA = true;
-        for (int j = 0; j < m; j++) {
-            if (arr[i][j] % a != 0) {
-                areAllElementsMultipleOfA = false;
-                break;
-            }
-        }
 
-        if (areAllElementsMultipleOfA) {
-            maxRow = i;
-        }
-    }
+	//вариант алгоритма в обычном режиме
+	startTime = omp_get_wtime();
+	for (int i = n - 1; i >= 0; i--)
+	{
+		bool isMultiple = true;
+		for (int j = 0; j < m; j++)
+		{
+			if (arr[i][j] % a != 0)
+			{
+				isMultiple = false;
+				break;
+			}
+		}
 
-    if (maxRow != -1) printf("Максимальный номер строки с элементами, кратными числу a: %d\n", maxRow);
-    else printf("В массиве нет строк, в которых все элементы кратны числу a\n");
-    printf("Время алгоритма с использованием директив распараллеливания (OpenMP) в мс = %f\n", omp_get_wtime() - startTime);
+		if (isMultiple)
+		{
+			maxRow = i;
+			break;
+		}
+	}
+	
+	endTime = omp_get_wtime();
 
-    return 0;
+	if (maxRow != -1) {
+		cout << "\nМаксимальный номер строки со всеми элементами, кратными a: " << maxRow << endl;
+	}
+	else {
+		cout << "\nСтроки со всеми элементами, кратными a, нет!" << endl;
+	}
+	cout << "\nВремя обычного алгоритма: " << endTime - startTime << endl;
+
+
+	//вариант алгоритма в многопоточном режиме
+	maxRow = -1;
+	omp_set_num_threads(6);
+	startTime = omp_get_wtime();
+	#pragma omp parallel for reduction(max : maxRow) 
+	for (int i = 0; i < n; i++)
+	{
+		bool isMultiple = true;
+		for (int j = 0; j < m; j++)
+		{
+			if (arr[i][j] % a != 0)
+			{
+				isMultiple = false;
+				break;
+			}
+		}
+
+		if (isMultiple)
+		{
+			maxRow = i;
+		}
+	}
+
+	endTime = omp_get_wtime();
+
+	if (maxRow != -1) {
+		cout << "\nМаксимальный номер строки со всеми элементами, кратными a: " << maxRow << endl;
+	}
+	else {
+		cout << "\nСтроки со всеми элементами, кратными a, нет!" << endl;
+	}
+	cout << "\nВремя алгоритма с использованием OpenMP: " << endTime - startTime << endl;
+
+
+	//освобождение памяти от массива
+	for (int i = 0; i < n; i++)
+		delete[] arr[i];
+	delete[] arr;
+
+	return 0;
 }
