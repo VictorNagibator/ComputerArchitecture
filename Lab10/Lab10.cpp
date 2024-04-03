@@ -1,4 +1,4 @@
-#include <mpi.h>
+п»ї#include <mpi.h>
 #include <iostream>
 #include <format>
 
@@ -34,12 +34,12 @@ int main(int *argc, char** argv) {
 
     MPI_Barrier(MPI_COMM_WORLD);
 
-    //выделение памяти под массив
+    //РІС‹РґРµР»РµРЅРёРµ РїР°РјСЏС‚Рё РїРѕРґ РјР°СЃСЃРёРІ
     arr = new int* [n];
     for (int i = 0; i < n; i++)
         arr[i] = new int[m];
 
-    //заполнение массива случайными числами
+    //Р·Р°РїРѕР»РЅРµРЅРёРµ РјР°СЃСЃРёРІР° СЃР»СѓС‡Р°Р№РЅС‹РјРё С‡РёСЃР»Р°РјРё
     srand(time(NULL) + rank);
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++) {
@@ -47,7 +47,7 @@ int main(int *argc, char** argv) {
         }
     }
 
-    //вывод массива
+    //РІС‹РІРѕРґ РјР°СЃСЃРёРІР°
     if (rank == 0) {
         for (int i = 0; i < n; i++) {
            for (int j = 0; j < m; j++) {
@@ -58,7 +58,7 @@ int main(int *argc, char** argv) {
     }
 
     int localMaxRow = -1;
-    //синхронизация процессов перед самим алгоритмом
+    //СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёСЏ РїСЂРѕС†РµСЃСЃРѕРІ РїРµСЂРµРґ СЃР°РјРёРј Р°Р»РіРѕСЂРёС‚РјРѕРј
     MPI_Barrier(MPI_COMM_WORLD);
 
     startTime = MPI_Wtime();
@@ -80,7 +80,7 @@ int main(int *argc, char** argv) {
     endTime = MPI_Wtime();
 
     int globalMaxRow;
-    //с помощью редукции выбираем строку с максимальным номером
+    //СЃ РїРѕРјРѕС‰СЊСЋ СЂРµРґСѓРєС†РёРё РІС‹Р±РёСЂР°РµРј СЃС‚СЂРѕРєСѓ СЃ РјР°РєСЃРёРјР°Р»СЊРЅС‹Рј РЅРѕРјРµСЂРѕРј
     MPI_Reduce(&localMaxRow, &globalMaxRow, 1, MPI_INT, MPI_MAX, 0, MPI_COMM_WORLD);
 
     if (rank == 0) {
@@ -94,7 +94,7 @@ int main(int *argc, char** argv) {
         cout << "Time: " << endTime - startTime << endl;
     }
 
-    //освобождение памяти от массива
+    //РѕСЃРІРѕР±РѕР¶РґРµРЅРёРµ РїР°РјСЏС‚Рё РѕС‚ РјР°СЃСЃРёРІР°
     for (int i = 0; i < n; i++)
         delete[] arr[i];
     delete[] arr;
