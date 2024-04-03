@@ -17,7 +17,6 @@ int main(int *argc, char** argv) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
-    //
     if (rank == 0) {
         cout << "Input n: ";
         cin >> n;
@@ -48,14 +47,14 @@ int main(int *argc, char** argv) {
     }
 
     //вывод массива
-    if (rank == 0) {
-        for (int i = 0; i < n; i++) {
-           for (int j = 0; j < m; j++) {
-                cout << format("{:6d} ", arr[i][j]);
-           }
-           cout << "\n";
-        }
-    }
+    //if (rank == 0) {
+    //    for (int i = 0; i < n; i++) {
+    //       for (int j = 0; j < m; j++) {
+    //            cout << format("{:6d} ", arr[i][j]);
+    //       }
+    //       cout << "\n";
+    //    }
+    //}
 
     int localMaxRow = -1;
     //синхронизация процессов перед самим алгоритмом
