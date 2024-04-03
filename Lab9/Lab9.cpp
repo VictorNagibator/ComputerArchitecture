@@ -46,7 +46,6 @@ int main()
 		cout << "\n";
 	}
 
-
 	//вариант алгоритма в обычном режиме
 	startTime = omp_get_wtime();
 	for (int i = n - 1; i >= 0; i--)
